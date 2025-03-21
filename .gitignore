@@ -1,32 +1,72 @@
-# Prerequisites
-*.d
+#include <iostream>
+using namespace std;
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+class CPhanSo {
+private:
+    int tuso; // Tử số
+    int mauso; // Mẫu số
+public:
+    // 1. Thiết lập mặc định
+    CPhanSo(); // Khởi tạo mặc định
+    // 2. Thiết lập với tham số
+    CPhanSo(int t, int m); // Khởi tạo với tham số
+    // 3. Thiết lập sao chép
+    CPhanSo(const CPhanSo &x); // Sao chép
+    // 4. Toán tử gán
+    CPhanSo& operator=(const CPhanSo &x); // Gán
+    // 5. Phương thức hủy
+    ~CPhanSo(); // Phương thức hủy
+    // Nhập phân số
+    friend istream& operator>>(istream &is, CPhanSo &x) {
+        cout << "Nhap tu so: ";
+        is >> x.tuso;
+        cout << "Nhap mau so: ";
+        is >> x.mauso;
+        return is;
+    }
+    // Xuất phân số
+    friend ostream& operator<<(ostream &os, const CPhanSo &x) {
+        os << x.tuso << "/" << x.mauso;
+        return os;
+    }
+    // Xét dấu phân số
+    int XetDau() {
+        if (tuso * mauso > 0) return 1; // Dương
+        if (tuso * mauso < 0) return -1; // Âm
+        return 0; // Bằng không
+    }
+};
+// Định nghĩa các phương thức
+CPhanSo::CPhanSo() : tuso(0), mauso(1) {} // Khởi tạo mặc định
+CPhanSo::CPhanSo(int t, int m) : tuso(t), mauso(m) { // Khởi tạo với tham số
+    if (mauso == 0) { // Kiểm tra mẫu số
+        mauso = 1; // Đặt mẫu số về 1 nếu mẫu số là 0
+    }
+}
+CPhanSo::CPhanSo(const CPhanSo &x) : tuso(x.tuso), mauso(x.mauso) {} // Sao chép
+CPhanSo& CPhanSo::operator=(const CPhanSo &x) {
+    if (this != &x) { // Kiểm tra tự gán
+        tuso = x.tuso; // Gán tử số
+        mauso = x.mauso; // Gán mẫu số
+    }
+    return *this; // Trả về đối tượng hiện tại
+}
+CPhanSo::~CPhanSo() {} // Phương thức hủy (không cần thực hiện gì đặc biệt)
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+int main() {
+    CPhanSo a;
+    cin >> a;
+    int kq = a.XetDau();
+    switch(kq) {
+        case 1:
+            cout << "Phan so " << a << " la duong.\n";
+            break;
+        case -1:
+            cout << "Phan so " << a << " la am.\n";
+            break;
+        case 0:
+            cout << "Phan so " << a << " bang khong.\n";
+            break;
+    }
+    return 0;
+}
